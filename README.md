@@ -1,11 +1,11 @@
 json-flatten
 ============
 
-Flatten / Un-flatten JSON objects
+Flatten / Un-flatten JSON [serializable] objects
 
 Object keys cannot start with a number, contain a period (.), or be empty strings ("").
 
-Examples:```ruby
+Examples:
 ```javascript
 JSON.flatten({foo:"bar"})
 {"foo":"bar"}

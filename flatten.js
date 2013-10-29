@@ -2,7 +2,9 @@
 // 
 (function() {
 "use strict";
-JSON.unflatten = function(data) {
+JSON.unflatten = function(data,seperator) {
+    seperator = typeof seperator !== 'undefined' ? seperator : '.';
+    
     if (Object(data) !== data || Array.isArray(data))
         return data;
     if ("" in data)
@@ -11,7 +13,7 @@ JSON.unflatten = function(data) {
     for(var p in data) {
         cur = result, prop = "", last = 0;
         do {
-            idx = p.indexOf(".", last);
+            idx = p.indexOf(seperator, last);
             temp = p.substring(last, idx !== -1 ? idx : undefined);
             cur = cur[prop] || (cur[prop] = (!isNaN(parseInt(temp)) ? [] : {}));
             prop = temp;
@@ -23,19 +25,21 @@ JSON.unflatten = function(data) {
 }
 JSON.flatten = function(data) {
     var result = {};
+    seperator = typeof seperator !== 'undefined' ? seperator : '.';
+    
     function recurse (cur, prop) {
         if (Object(cur) !== cur) {
             result[prop] = cur;
         } else if (Array.isArray(cur)) {
              for(var i=0, l=cur.length; i<l; i++)
-                 recurse(cur[i], prop ? prop+"."+i : ""+i);
+                 recurse(cur[i], prop ? prop+seperator+i : ""+i);
             if (l == 0)
                 result[prop] = [];
         } else {
             var isEmpty = true;
             for (var p in cur) {
                 isEmpty = false;
-                recurse(cur[p], prop ? prop+"."+p : p);
+                recurse(cur[p], prop ? prop+seperator+p : p);
             }
             if (isEmpty)
                 result[prop] = {};
